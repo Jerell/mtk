@@ -19,5 +19,10 @@ format:
   pdf:
     documentclass: scrreprt
 
+execute:
+  freeze: auto
 
+crossref:
+  eq-prefix: Eq
 
+date-modified: last-modified
