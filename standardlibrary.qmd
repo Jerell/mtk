@@ -13,8 +13,8 @@ Parameters:
 - $area$: [$m^2$] tube cross sectional area  
 - $length$: [$m$] real length of the tube  
 - $perimeter$: [$m$] perimeter of the pipe cross section (needed only for   non-circular pipes)
-- $shape_factor$: shape factor, see $friction_factor$ function  
-- $head_factor$: effective length multiplier, used to account for addition   friction from flow development and additional friction such as pipe bends, entrance/exit lossses, etc.
+- $shape\_factor$: shape factor, see $friction\_factor$ function  
+- $head\_factor$: effective length multiplier, used to account for addition   friction from flow development and additional friction such as pipe bends, entrance/exit lossses, etc.
 
 ```julia
 @component function Tube(N, add_inertia = true; p_int, area, length, head_factor = 1,
@@ -101,8 +101,8 @@ Parameters:
 - $area$: [$m^2$] tube cross sectional area  
 - $length_{int}$: [$m$] initial tube length  
 - $perimeter$: [$m$] perimeter of the pipe cross section (needed only for   non-circular pipes)
-- $shape_factor$: shape factor, see $friction_factor$ function  
-- $head_factor$: effective length multiplier, used to account for addition   friction from flow development and additional friction such as pipe bends, entrance/exit lossses, etc.
+- $shape\_factor$: shape factor, see $friction\_factor$ function  
+- $head\_factor$: effective length multiplier, used to account for addition   friction from flow development and additional friction such as pipe bends, entrance/exit lossses, etc.
   
 ```julia
 @component function TubeBase(add_inertia = true, variable_length = true; p_int, area,
