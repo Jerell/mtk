@@ -372,9 +372,9 @@ window.Quarto = {
 - <span class="math inline">\(x\)</span>: [<span class="math inline">\(m\)</span>] length of the pipe<br>
 - <span class="math inline">\(ddm\)</span>: [<span class="math inline">\(kg/s^2\)</span>] Rate of change of mass flow rate in control volume.</p>
 <p>Parameters:<br>
-- <span class="math inline">\(p_int\)</span>: [<span class="math inline">\(Pa\)</span>] initial pressure<br>
+- <span class="math inline">\(p_{int}\)</span>: [<span class="math inline">\(Pa\)</span>] initial pressure<br>
 - <span class="math inline">\(area\)</span>: [<span class="math inline">\(m^2\)</span>] tube cross sectional area<br>
-- <span class="math inline">\(length_int\)</span>: [<span class="math inline">\(m\)</span>] initial tube length<br>
+- <span class="math inline">\(length_{int}\)</span>: [<span class="math inline">\(m\)</span>] initial tube length<br>
 - <span class="math inline">\(perimeter\)</span>: [<span class="math inline">\(m\)</span>] perimeter of the pipe cross section (needed only for non-circular pipes) - <span class="math inline">\(shape_factor\)</span>: shape factor, see <span class="math inline">\(friction_factor\)</span> function<br>
 - <span class="math inline">\(head_factor\)</span>: effective length multiplier, used to account for addition friction from flow development and additional friction such as pipe bends, entrance/exit lossses, etc.</p>
 <div class="sourceCode" id="annotated-cell-2"><pre class="sourceCode julia code-annotation-code code-with-copy code-annotated"><code class="sourceCode julia"><span id="annotated-cell-2-1"><a href="#annotated-cell-2-1" aria-hidden="true" tabindex="-1"></a><span class="pp">@component</span> <span class="kw">function</span> <span class="fu">TubeBase</span>(add_inertia <span class="op">=</span> <span class="cn">true</span>, variable_length <span class="op">=</span> <span class="cn">true</span>; p_int, area,</span>
@@ -496,7 +496,7 @@ inertia = \frac{c}{area} * ddm
 <h2 data-number="3.3" class="anchored" data-anchor-id="flowdivider"><span class="header-section-number">3.3</span> FlowDivider</h2>
 <p>Reduces the flow from <code>port_a</code> to <code>port_b</code> by <code>n</code>. Useful for modeling parallel tubes efficiently by placing a <code>FlowDivider</code> on each end of a tube.</p>
 <p>Parameters:<br>
-- <span class="math inline">\(p_int\)</span>: [<span class="math inline">\(Pa\)</span>] initial pressure<br>
+- <span class="math inline">\(p_{int}\)</span>: [<span class="math inline">\(Pa\)</span>] initial pressure<br>
 - <span class="math inline">\(n\)</span>: divide flow from <span class="math inline">\(port_a\)</span> to <span class="math inline">\(port_b\)</span> by <span class="math inline">\(n\)</span></p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="pp">@component</span> <span class="kw">function</span> <span class="fu">FlowDivider</span>(; p_int, n, name)</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
