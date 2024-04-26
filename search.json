@@ -24,7 +24,17 @@
     "href": "modelingtoolkit.html",
     "title": "2  ModelingToolkit.jl",
     "section": "",
-    "text": "ModelingToolkit.jl is a modeling framework for high-performance symbolic-numeric computation in scientific computing and scientific machine learning. It allows for users to give a high-level description of a model for symbolic preprocessing to analyze and enhance the model. ModelingToolkit can automatically generate fast functions for model components like Jacobians and Hessians, along with automatically sparsifying and parallelizing the computations. Automatic transformations, such as index reduction, can be applied to the model to make it easier for numerical solvers to handle.",
+    "text": "2.1 todo",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>ModelingToolkit.jl</span>"
+    ]
+  },
+  {
+    "objectID": "modelingtoolkit.html#todo",
+    "href": "modelingtoolkit.html#todo",
+    "title": "2  ModelingToolkit.jl",
+    "section": "",
+    "text": "explain mtk syntax and setup\nmodelling with mtk",
     "crumbs": [
       "<span class='chapter-number'>2</span>  <span class='chapter-title'>ModelingToolkit.jl</span>"
     ]
