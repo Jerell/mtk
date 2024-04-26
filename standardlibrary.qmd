@@ -53,7 +53,7 @@ Parameters:
     end
 
     pipe_bases = []
-    for i in 1:(N - 1)
+    for i in 1:(N - 1) # <1>
         x = TubeBase(add_inertia; name = Symbol("p$i"),
             shape_factor = ParentScope(shape_factor),
             p_int = ParentScope(p_int), area = ParentScope(area),
@@ -86,6 +86,7 @@ Parameters:
     return ODESystem(eqs, t, vars, pars; name, systems = [ports; pipe_bases; volumes])
 end
 ```
+1. Discretization
 
 ## TubeBase
 
@@ -156,7 +157,7 @@ Parameters:
         0
     end
 
-    eqs = [0 ~ port_a.dm + port_b.dm
+    eqs = [0 ~ port_a.dm + port_b.dm # <1>
            domain_connect(port_a, port_b)]
 
     if variable_length
@@ -171,7 +172,55 @@ Parameters:
 
     ODESystem(eqs, t, vars, pars; name, systems)
 end
+
+regPow(x, a, delta = 0.01) = x * (x * x + delta * delta)^((a - 1) / 2);
+
+
+"""
+- `dm`: [kg/s] mass flow
+- `area`: [m^2] tube cross sectional area
+- `d_h`: [m] tube hydraulic diameter.  For circular tubes d_h is the tube diameter, otherwise it can be found from `4*area/perimeter`
+- `density`: [kg/m^3] fluid density
+- `viscosity`: [Pa*s] or [kg/m-s] fluid dynamic viscosity
+- `shape_factor`: the constant defining the laminar fully developed constant f*Re related to the shape of the tube cross section
+
+Reference: Introduction to Fluid Mechanics, Fox & McDonald, 5th Edition, equations 8.19 and 8.21
+"""
+function friction_factor(dm, area, d_h, viscosity, shape_factor)
+    # u = abs(dm) / (density * area)
+    # Re = density * u * d_h / viscosity
+
+    Re = abs(dm) * d_h / (area * viscosity)
+
+    if Re <= 2000
+        return f_laminar(shape_factor, Re)
+    elseif 2000 < Re < 3000
+        return transition(2000, 3000, f_laminar(shape_factor, Re),
+            f_turbulent(shape_factor, Re), Re)
+    else
+        return f_turbulent(shape_factor, Re)
+    end
+end
 ```
+1. Continuity equation
+
+$$
+\Delta p = shear + inertia
+$$
+
+$$
+u = \frac{dm}{\rho * area}
+$$
+
+$$ 
+shear = \frac{1}{2} * \rho * u * (u^2 + 0.01^2)^{\frac{1}{2}} * f * head\_factor * \frac{c}{d_{h}}
+$$
+
+$$
+inertia = \frac{c}{area} * ddm
+$$
+
+
 
 ## FlowDivider
 
