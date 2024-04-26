@@ -96,14 +96,14 @@ States:
 - $x$: [$m$] length of the pipe  
 - $ddm$: [$kg/s^2$] Rate of change of mass flow rate in control volume.  
 
-Parameters:
-- $p_int$: [$Pa$] initial pressure
-- $area$: [$m^2$] tube cross sectional area
-- $length_int$: [$m$] initial tube length
-- $perimeter$: [$m$] perimeter of the pipe cross section (needed only for non-circular pipes)
-- $shape_factor$: shape factor, see $friction_factor$ function
-- $head_factor$: effective length multiplier, used to account for addition friction from flow development and additional friction such as pipe bends, entrance/exit lossses, etc.
-
+Parameters:  
+- $p_int$: [$Pa$] initial pressure  
+- $area$: [$m^2$] tube cross sectional area  
+- $length_int$: [$m$] initial tube length  
+- $perimeter$: [$m$] perimeter of the pipe cross section (needed only for   non-circular pipes)
+- $shape_factor$: shape factor, see $friction_factor$ function  
+- $head_factor$: effective length multiplier, used to account for addition   friction from flow development and additional friction such as pipe bends, entrance/exit lossses, etc.
+  
 ```julia
 @component function TubeBase(add_inertia = true, variable_length = true; p_int, area,
         length_int, head_factor = 1,
@@ -172,7 +172,8 @@ Parameters:
 
     ODESystem(eqs, t, vars, pars; name, systems)
 end
-
+```
+```julia
 regPow(x, a, delta = 0.01) = x * (x * x + delta * delta)^((a - 1) / 2);
 
 
