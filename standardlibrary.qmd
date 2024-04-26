@@ -97,9 +97,9 @@ States:
 - $ddm$: [$kg/s^2$] Rate of change of mass flow rate in control volume.  
 
 Parameters:  
-- $p_int$: [$Pa$] initial pressure  
+- $p_{int}$: [$Pa$] initial pressure  
 - $area$: [$m^2$] tube cross sectional area  
-- $length_int$: [$m$] initial tube length  
+- $length_{int}$: [$m$] initial tube length  
 - $perimeter$: [$m$] perimeter of the pipe cross section (needed only for   non-circular pipes)
 - $shape_factor$: shape factor, see $friction_factor$ function  
 - $head_factor$: effective length multiplier, used to account for addition   friction from flow development and additional friction such as pipe bends, entrance/exit lossses, etc.
@@ -231,7 +231,7 @@ end
 Reduces the flow from `port_a` to `port_b` by `n`.  Useful for modeling parallel tubes efficiently by placing a `FlowDivider` on each end of a tube.
 
 Parameters:  
-- $p_int$: [$Pa$] initial pressure  
+- $p_{int}$: [$Pa$] initial pressure  
 - $n$: divide flow from $port_a$ to $port_b$ by $n$  
 
 ```julia
