@@ -173,6 +173,26 @@ Parameters:
     ODESystem(eqs, t, vars, pars; name, systems)
 end
 ```
+1. Continuity equation
+
+Pressure difference across the tube is defined by these equations.
+
+$$
+\Delta p = shear + inertia
+$$
+
+$$
+u = \frac{dm}{\rho * area}
+$$
+
+$$ 
+shear = \frac{1}{2} * \rho * u * (u^2 + 0.01^2)^{\frac{1}{2}} * f * head\_factor * \frac{c}{d_{h}}
+$$
+
+$$
+inertia = \frac{c}{area} * ddm
+$$
+
 ```julia
 regPow(x, a, delta = 0.01) = x * (x * x + delta * delta)^((a - 1) / 2);
 
@@ -203,23 +223,6 @@ function friction_factor(dm, area, d_h, viscosity, shape_factor)
     end
 end
 ```
-1. Continuity equation
-
-$$
-\Delta p = shear + inertia
-$$
-
-$$
-u = \frac{dm}{\rho * area}
-$$
-
-$$ 
-shear = \frac{1}{2} * \rho * u * (u^2 + 0.01^2)^{\frac{1}{2}} * f * head\_factor * \frac{c}{d_{h}}
-$$
-
-$$
-inertia = \frac{c}{area} * ddm
-$$
 
 
 
