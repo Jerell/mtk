@@ -17,8 +17,8 @@ Assumptions
 - Ideal gas law is available.
 
 Parameters:  
-- `R`: [`kg^{-1}⋅m^{-1}`] Resistance coefficient of a pipe (or pipe network)  
-- `T`: [`K`] Approximate temperature of the gas inside pipe.  
+- $R$: [$kg^{-1}⋅m^{-1}$] Resistance coefficient of a pipe (or pipe network)  
+- $T$: [$K$] Approximate temperature of the gas inside pipe.  
 
 $$
 p_{in}-p_{out}=Rq_m|q_m|
