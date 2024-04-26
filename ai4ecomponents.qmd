@@ -1,0 +1,33 @@
+# Ai4EComponentLib.jl
+
+Ai4EComponentLib.jl is a component library based on the ModelingToolkit acasual modeling system. It has models for [compressed air systems](https://ai4energy.github.io/Ai4EComponentLib.jl/dev/tutorials/CompressedAirSystem/), [incompressible fluids](https://ai4energy.github.io/Ai4EComponentLib.jl/dev/tutorials/IncompressiblePipe/), [thermodynamic processes](https://ai4energy.github.io/Ai4EComponentLib.jl/dev/API/ThermodynamicCycle/) and more.
+
+These models appear to use the assumption that temperature change in the pipes is negligible.
+
+Here is an [example HVAC system](https://ai4energy.github.io/Ai4EComponentLib.jl/dev/tutorials/HVAC/)
+
+![example HVAC system](assets/HVAC.png)
+
+And the pipe model
+
+```julia
+function SimplePipe(; name, R=100, T=300)
+    @named inlet = FlowPort() # <1>
+    @named outlet = FlowPort() # <1>
+    ps = @parameters begin
+        R = R # <2>
+    end
+    eqs = [ # <3>
+        inlet.p - outlet.p ~ R * inlet.qm * abs(inlet.qm), # <4>
+        inlet.qm + outlet.qm ~ 0, # <5>
+        inlet.T ~ outlet.T #<6>
+    ]
+    compose(ODESystem(eqs, t, [], ps; name=name), inlet, outlet)
+end
+```
+1. FlowPorts define the variables at the inlet and outlet of the pipe.
+2. Parameters can be defined for each component. Here, R is friction factor [Pa·s/m³], which is given a default value of 100.
+3. A set of equations defines the relationship between the inlet and outlet variables.
+4. Frictional pressure loss.
+5. Continuity equation.
+6. Constant temperature.

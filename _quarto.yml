@@ -8,6 +8,9 @@ book:
   chapters:
     - index.qmd
     - intro.qmd
+    - modelingtoolkit.qmd
+    - standardlibrary.qmd
+    - ai4ecomponents.qmd
     - summary.qmd
     - references.qmd
 
