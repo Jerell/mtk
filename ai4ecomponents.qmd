@@ -2,13 +2,11 @@
 
 Ai4EComponentLib.jl is a component library based on the ModelingToolkit acasual modeling system. It has models for [compressed air systems](https://ai4energy.github.io/Ai4EComponentLib.jl/dev/tutorials/CompressedAirSystem/), [incompressible fluids](https://ai4energy.github.io/Ai4EComponentLib.jl/dev/tutorials/IncompressiblePipe/), [thermodynamic processes](https://ai4energy.github.io/Ai4EComponentLib.jl/dev/API/ThermodynamicCycle/) and more.
 
-These models appear to use the assumption that temperature change in the pipes is negligible.
-
 Here is an [example HVAC system](https://ai4energy.github.io/Ai4EComponentLib.jl/dev/tutorials/HVAC/)
 
-![example HVAC system](assets/HVAC.png)
+![example HVAC system](assets/HVAC.png){#fig-hvac-example}
 
-And the pipe model
+These models appear to use the assumption that temperature change in the pipes is negligible.
 
 ```julia
 function SimplePipe(; name, R=100, T=300)
@@ -31,3 +29,16 @@ end
 4. Frictional pressure loss.
 5. Continuity equation.
 6. Constant temperature.
+
+```julia
+@connector function FlowPort(; name, T0=30.0)
+    sts = @variables begin
+        p(t) = 1.013e5
+        (qm(t)=1, [connect = Flow])
+        T(t)=T0
+    end
+    ODESystem(Equation[], t, sts, []; name=name)
+end
+```
+
+The `FlowPort` has pressure, mass flow, and temperature variables. See [Connectors](/connectors.qmd) for more info.

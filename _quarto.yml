@@ -10,7 +10,11 @@ book:
     - intro.qmd
     - modelingtoolkit.qmd
     - standardlibrary.qmd
-    - ai4ecomponents.qmd
+    - part: Ai4E
+      chapters:
+        - ai4ecomponents.qmd
+        - ai4epipes.qmd
+    - connectors.qmd
     - summary.qmd
     - references.qmd
 
