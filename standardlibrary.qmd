@@ -2,4 +2,4 @@
 
 ModelingToolkitStandardLibrary.jl is a standard library for the ModelingToolkit acausal modeling system.
 
-Its [Hydraulic](https://docs.sciml.ai/ModelingToolkitStandardLibrary/stable/API/hydraulic/#hydraulic) includes components (such as tubes, valves, and volumes) that can be used to model isothermal compressible flows.
+Its [Hydraulic](https://docs.sciml.ai/ModelingToolkitStandardLibrary/stable/API/hydraulic/#hydraulic) package includes components (such as tubes, valves, and volumes) that can be used to model isothermal compressible flows.
