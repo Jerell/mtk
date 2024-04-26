@@ -288,7 +288,7 @@ Parameters:
 Arguments:  
 - $zin$: [$m$] The height of inlet port  
 - $zout$: [$m$] The height of outlet port  
-- $ρ$: [`m³/kg] The density of fluid passing the port  
+- $ρ$: [$m^3/kg$] The density of fluid passing the port  
   
 ::: {.callout-warning}
 Same as above.
