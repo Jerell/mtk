@@ -2,6 +2,10 @@
 
 Ai4EComponentLib.jl is a component library based on the ModelingToolkit acasual modeling system. It has models for [compressed air systems](https://ai4energy.github.io/Ai4EComponentLib.jl/dev/tutorials/CompressedAirSystem/), [incompressible fluids](https://ai4energy.github.io/Ai4EComponentLib.jl/dev/tutorials/IncompressiblePipe/), [thermodynamic processes](https://ai4energy.github.io/Ai4EComponentLib.jl/dev/API/ThermodynamicCycle/) and more.
 
+Its pipe models allow for complex branching and merging.
+
+![Complex pipe network](assets/incompressible-example-5.png){#fig-complex-pipes}
+
 Here is an [example HVAC system](https://ai4energy.github.io/Ai4EComponentLib.jl/dev/tutorials/HVAC/)
 
 ![example HVAC system](assets/HVAC.png){#fig-hvac-example}
