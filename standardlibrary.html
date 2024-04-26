@@ -377,7 +377,7 @@ window.Quarto = {
 - <span class="math inline">\(length_int\)</span>: [<span class="math inline">\(m\)</span>] initial tube length<br>
 - <span class="math inline">\(perimeter\)</span>: [<span class="math inline">\(m\)</span>] perimeter of the pipe cross section (needed only for non-circular pipes) - <span class="math inline">\(shape_factor\)</span>: shape factor, see <span class="math inline">\(friction_factor\)</span> function<br>
 - <span class="math inline">\(head_factor\)</span>: effective length multiplier, used to account for addition friction from flow development and additional friction such as pipe bends, entrance/exit lossses, etc.</p>
-<div class="sourceCode" id="annotated-cell-2"><pre class="sourceCode julia code-annotation-code code-with-copy"><code class="sourceCode julia"><span id="annotated-cell-2-1"><a href="#annotated-cell-2-1" aria-hidden="true" tabindex="-1"></a><span class="pp">@component</span> <span class="kw">function</span> <span class="fu">TubeBase</span>(add_inertia <span class="op">=</span> <span class="cn">true</span>, variable_length <span class="op">=</span> <span class="cn">true</span>; p_int, area,</span>
+<div class="sourceCode" id="annotated-cell-2"><pre class="sourceCode julia code-annotation-code code-with-copy code-annotated"><code class="sourceCode julia"><span id="annotated-cell-2-1"><a href="#annotated-cell-2-1" aria-hidden="true" tabindex="-1"></a><span class="pp">@component</span> <span class="kw">function</span> <span class="fu">TubeBase</span>(add_inertia <span class="op">=</span> <span class="cn">true</span>, variable_length <span class="op">=</span> <span class="cn">true</span>; p_int, area,</span>
 <span id="annotated-cell-2-2"><a href="#annotated-cell-2-2" aria-hidden="true" tabindex="-1"></a>        length_int, head_factor <span class="op">=</span> <span class="fl">1</span>,</span>
 <span id="annotated-cell-2-3"><a href="#annotated-cell-2-3" aria-hidden="true" tabindex="-1"></a>        perimeter <span class="op">=</span> <span class="fl">2</span> <span class="op">*</span> <span class="fu">sqrt</span>(area <span class="op">*</span> <span class="cn">pi</span>),</span>
 <span id="annotated-cell-2-4"><a href="#annotated-cell-2-4" aria-hidden="true" tabindex="-1"></a>        shape_factor <span class="op">=</span> <span class="fl">64</span>, name)</span>
@@ -429,7 +429,7 @@ window.Quarto = {
 <span id="annotated-cell-2-50"><a href="#annotated-cell-2-50" aria-hidden="true" tabindex="-1"></a>        <span class="fl">0</span></span>
 <span id="annotated-cell-2-51"><a href="#annotated-cell-2-51" aria-hidden="true" tabindex="-1"></a>    <span class="cf">end</span></span>
 <span id="annotated-cell-2-52"><a href="#annotated-cell-2-52" aria-hidden="true" tabindex="-1"></a></span>
-<span id="annotated-cell-2-53"><a href="#annotated-cell-2-53" aria-hidden="true" tabindex="-1"></a>    eqs <span class="op">=</span> [<span class="fl">0</span> <span class="op">~</span> port_a.dm <span class="op">+</span> port_b.dm</span>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-2" data-target-annotation="1" onclick="event.preventDefault();">1</a><span id="annotated-cell-2-53" class="code-annotation-target"><a href="#annotated-cell-2-53" aria-hidden="true" tabindex="-1"></a>    eqs <span class="op">=</span> [<span class="fl">0</span> <span class="op">~</span> port_a.dm <span class="op">+</span> port_b.dm</span>
 <span id="annotated-cell-2-54"><a href="#annotated-cell-2-54" aria-hidden="true" tabindex="-1"></a>           <span class="fu">domain_connect</span>(port_a, port_b)]</span>
 <span id="annotated-cell-2-55"><a href="#annotated-cell-2-55" aria-hidden="true" tabindex="-1"></a></span>
 <span id="annotated-cell-2-56"><a href="#annotated-cell-2-56" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> variable_length</span>
@@ -443,7 +443,26 @@ window.Quarto = {
 <span id="annotated-cell-2-64"><a href="#annotated-cell-2-64" aria-hidden="true" tabindex="-1"></a>    <span class="cf">end</span></span>
 <span id="annotated-cell-2-65"><a href="#annotated-cell-2-65" aria-hidden="true" tabindex="-1"></a></span>
 <span id="annotated-cell-2-66"><a href="#annotated-cell-2-66" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ODESystem</span>(eqs, t, vars, pars; name, systems)</span>
-<span id="annotated-cell-2-67"><a href="#annotated-cell-2-67" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="annotated-cell-2-67"><a href="#annotated-cell-2-67" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<dl class="code-annotation-container-grid">
+<dt data-target-cell="annotated-cell-2" data-target-annotation="1">1</dt>
+<dd>
+<span data-code-cell="annotated-cell-2" data-code-lines="53" data-code-annotation="1">Continuity equation</span>
+</dd>
+</dl>
+<p>Pressure difference across the tube is defined by these equations.</p>
+<p><span class="math display">\[
+\Delta p = shear + inertia
+\]</span></p>
+<p><span class="math display">\[
+u = \frac{dm}{\rho * area}
+\]</span></p>
+<p><span class="math display">\[
+shear = \frac{1}{2} * \rho * u * (u^2 + 0.01^2)^{\frac{1}{2}} * f * head\_factor * \frac{c}{d_{h}}
+\]</span></p>
+<p><span class="math display">\[
+inertia = \frac{c}{area} * ddm
+\]</span></p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">regPow</span>(x, a, delta <span class="op">=</span> <span class="fl">0.01</span>) <span class="op">=</span> x <span class="op">*</span> (x <span class="op">*</span> x <span class="op">+</span> delta <span class="op">*</span> delta)<span class="op">^</span>((a <span class="op">-</span> <span class="fl">1</span>) <span class="op">/</span> <span class="fl">2</span>);</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -472,21 +491,6 @@ window.Quarto = {
 <span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="fu">f_turbulent</span>(shape_factor, Re)</span>
 <span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>    <span class="cf">end</span></span>
 <span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<ol type="1">
-<li>Continuity equation</li>
-</ol>
-<p><span class="math display">\[
-\Delta p = shear + inertia
-\]</span></p>
-<p><span class="math display">\[
-u = \frac{dm}{\rho * area}
-\]</span></p>
-<p><span class="math display">\[
-shear = \frac{1}{2} * \rho * u * (u^2 + 0.01^2)^{\frac{1}{2}} * f * head\_factor * \frac{c}{d_{h}}
-\]</span></p>
-<p><span class="math display">\[
-inertia = \frac{c}{area} * ddm
-\]</span></p>
 </section>
 <section id="flowdivider" class="level2" data-number="3.3">
 <h2 data-number="3.3" class="anchored" data-anchor-id="flowdivider"><span class="header-section-number">3.3</span> FlowDivider</h2>
