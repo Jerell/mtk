@@ -6,7 +6,7 @@
 
 Components are defined as sets of parameters, variables, subcomponents/systems, and equations. These are passed into functions like `NonlinearSystem` and `ODESystem` that construct the system of equations.
 
-### Systems
+### Systems and solving
 
 A `system` is used to create a `problem` which is then solved.
 
@@ -35,6 +35,34 @@ eqs = [
 ]
 @mtkbuild odesys = ODESystem(eqs, t, vars, pars)
 ```
+
+[Example](https://docs.sciml.ai/ModelingToolkit/dev/tutorials/acausal_components/#Solving-this-System)
+
+The user defines initial conditions for unknowns, converts the system to an `ODEProblem` in mass matrix form, then solves it with an [ODEProblem mass matrix DAE solver](https://docs.sciml.ai/DiffEqDocs/stable/solvers/dae_solve/#OrdinaryDiffEq.jl-(Mass-Matrix)).
+
+The solution object can be accessed via its symbols. For example, let's retrieve the voltage of the resistor over time:
+
+```julia
+sol[rc_model.resistor.v]
+15-element Vector{Float64}:
+ 1.0
+ 0.9999500012499791
+ 0.9994501512222747
+ 0.9944653727971767
+ 0.9469527024594013
+ 0.8312914287759745
+ 0.676778932381136
+ 0.520817444231291
+ 0.3694346581629384
+ 0.24258325039205164
+ 0.14523567083707245
+ 0.07897256881386727
+ 0.03841787611744962
+ 0.01648322536200686
+ 0.006741257426458369
+```
+
+The `remake` function allows you to [efficiently change the parameters of the problem](https://youtu.be/i5wwnMIzsVw?t=1853).
 
 ### Components
 
@@ -123,6 +151,7 @@ These are the variables I display as results in the breadboard
 
 - [Acausal component based modeling](https://sciml.github.io/ModelingToolkitCourse/dev/lectures/lecture1/#Acausal-Component-Based-Modeling)
 - [Developing high-fidelity models of hydraulic systems](https://sciml.github.io/ModelingToolkitCourse/dev/lectures/lecture2/)
+- [Introduction to ModelingToolkit for Industrial Modelers: A Hands-On Training](https://www.youtube.com/watch?v=i5wwnMIzsVw)
 
 # Bifurcation diagrams
 
