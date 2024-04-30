@@ -2,7 +2,132 @@
 
 [ModelingToolkit.jl](https://github.com/SciML/ModelingToolkit.jl) is a modeling framework for high-performance symbolic-numeric computation in scientific computing and scientific machine learning. It allows for users to give a high-level description of a model for symbolic preprocessing to analyze and enhance the model. ModelingToolkit can automatically generate fast functions for model components like Jacobians and Hessians, along with automatically sparsifying and parallelizing the computations. Automatic transformations, such as index reduction, can be applied to the model to make it easier for numerical solvers to handle.
 
-## todo
+## Syntax
 
-- explain mtk syntax and setup
-- modelling with mtk
+Components are defined as sets of parameters, variables, subcomponents/systems, and equations. These are passed into functions like `NonlinearSystem` and `ODESystem` that construct the system of equations.
+
+### Systems
+
+A `system` is used to create a `problem` which is then solved.
+
+```julia
+@named nlsys = NonlinearSystem(eqs, vars, pars)
+sys = structural_simplify(nlsys)
+prob = NonlinearProblem(sys, [], []) # [initial conditions], [parameters]
+```
+
+```julia
+@named odesys = ODESystem(eqs, t, vars, pars)
+sys = structural_simplify(odesys)
+prob = ODEProblem(sys, [], (0.0, 0.0001), [])
+sol = solve(prob)
+```
+
+These systems can also be defined using macros.
+
+```julia
+pars = @parameters F=100 d=1 k=1000
+vars = @variables x(t)=0.0 ẋ(t)=F/d ẍ(t)=0.0
+eqs = [
+    D(x) ~ ẋ
+    D(ẋ) ~ ẍ
+    d*ẋ + k*x^1.5 ~ F
+]
+@mtkbuild odesys = ODESystem(eqs, t, vars, pars)
+```
+
+### Components
+
+Components can be written using an explicit function syntax, where the function returns the `system`, or using macros.
+
+```julia
+@connector function FlowPort(; name)
+    sts = @variables begin
+        p(t) = 1.013e5
+        (qm(t)=1, [connect = Flow])
+    end
+    ODESystem(Equation[], t, sts, []; name=name)
+end
+```
+
+```julia
+@connector Port begin
+    p(t)
+    ṁ(t) = 0, [connect = Flow]
+end
+
+@mtkmodel Orifice begin #<1>
+    @parameters begin
+        C₀=2.7
+        A₀=0.00094
+        ρ₀=1000
+        p′=0
+    end
+    @variables begin
+        ṁ(t)=0
+        p₁(t)=p′
+        p₂(t)=p′
+    end
+    @components begin
+        port₁ = Port()
+        port₂ = Port()
+    end
+    @equations begin
+        ṁ ~ +port₁.ṁ
+        ṁ ~ -port₂.ṁ
+        p₁ ~ port₁.p
+        p₂ ~ port₂.p
+
+        p₁ - p₂ ~ (1/2) * ρ₀ * u^2 * C₀
+    end
+end
+```
+1. the `@mtkmodel` macro is equivalent to the function that returns an `ODESystem` in the prior code block
+
+## Variables
+
+After constructing a system, ModelingToolkit identifies unknown and observed variables and equations.
+
+Observed equations look something like this
+
+```julia
+observed(odesys_x)
+15-element Vector{Symbolics.Equation}:
+ xˍt(t) ~ 6.283185307179586amp*f*cos(6.283185307179586f*t)
+ xˍtt(t) ~ -39.47841760435743amp*(f^2)*sin(6.283185307179586f*t)
+ xˍttt(t) ~ -248.05021344239853amp*(f^3)*cos(6.283185307179586f*t)
+ x(t) ~ x₀ + amp*sin(6.283185307179586f*t)
+ ẋ(t) ~ xˍt(t)
+ ẋˍt(t) ~ xˍtt(t)
+ ẋˍtt(t) ~ xˍttt(t)
+ ẍ(t) ~ ẋˍt(t)
+ ẍˍt(t) ~ ẋˍtt(t)
+ p(t) ~ (-M*g - M*ẍ(t)) / (-A)
+ pˍt(t) ~ (M*ẍˍt(t)) / A
+ r(t) ~ r₀*(1 + p(t) / β)
+ rˍt(t) ~ (r₀*pˍt(t)) / β
+ ṙ(t) ~ rˍt(t)
+ ṁ(t) ~ A*r(t)*ẋ(t) + A*x(t)*ṙ(t)
+```
+
+
+:::{.callout-note}
+Some of the observables have a ˍt appended to the name. These are called dummy derivatives, which are a consequence of the algorithm to reduce the system DAE index.
+:::
+
+:::{.callout-note}
+These are the variables I display as results in the breadboard
+:::
+
+## Examples
+
+- [Acausal component based modeling](https://sciml.github.io/ModelingToolkitCourse/dev/lectures/lecture1/#Acausal-Component-Based-Modeling)
+- [Developing high-fidelity models of hydraulic systems](https://sciml.github.io/ModelingToolkitCourse/dev/lectures/lecture2/)
+
+# Bifurcation diagrams
+
+[Bifurcation diagrams](https://docs.sciml.ai/ModelingToolkit/dev/tutorials/bifurcation_diagram_computation/) describe how, for a dynamic system, the quantity and quality of its steady states changes with a parameter's value. These can be computed through the BifurcationKit.jl package. ModelingToolkit provides a simple interface for creating BifurcationKit compatible `BifurcationProblems` from `NonlinearSystems` and `ODESystems`.
+
+# Comparison of ModelingToolkit vs Equation-Based and Block Modeling Languages
+
+[This page](https://docs.sciml.ai/ModelingToolkit/dev/comparison/) contains comparisons against Modelica and other software.
