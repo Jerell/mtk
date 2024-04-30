@@ -24,17 +24,37 @@
     "href": "modelingtoolkit.html",
     "title": "2  ModelingToolkit.jl",
     "section": "",
-    "text": "2.1 todo",
+    "text": "2.1 Syntax\nComponents are defined as sets of parameters, variables, subcomponents/systems, and equations. These are passed into functions like NonlinearSystem and ODESystem that construct the system of equations.",
     "crumbs": [
       "<span class='chapter-number'>2</span>  <span class='chapter-title'>ModelingToolkit.jl</span>"
     ]
   },
   {
-    "objectID": "modelingtoolkit.html#todo",
-    "href": "modelingtoolkit.html#todo",
+    "objectID": "modelingtoolkit.html#syntax",
+    "href": "modelingtoolkit.html#syntax",
     "title": "2  ModelingToolkit.jl",
     "section": "",
-    "text": "explain mtk syntax and setup\nmodelling with mtk",
+    "text": "2.1.1 Systems\nA system is used to create a problem which is then solved.\n@named nlsys = NonlinearSystem(eqs, vars, pars)\nsys = structural_simplify(nlsys)\nprob = NonlinearProblem(sys, [], []) # [initial conditions], [parameters]\n@named odesys = ODESystem(eqs, t, vars, pars)\nsys = structural_simplify(odesys)\nprob = ODEProblem(sys, [], (0.0, 0.0001), [])\nsol = solve(prob)\nThese systems can also be defined using macros.\npars = @parameters F=100 d=1 k=1000\nvars = @variables x(t)=0.0 ẋ(t)=F/d ẍ(t)=0.0\neqs = [\n    D(x) ~ ẋ\n    D(ẋ) ~ ẍ\n    d*ẋ + k*x^1.5 ~ F\n]\n@mtkbuild odesys = ODESystem(eqs, t, vars, pars)\n\n\n2.1.2 Components\nComponents can be written using an explicit function syntax, where the function returns the system, or using macros.\n@connector function FlowPort(; name)\n    sts = @variables begin\n        p(t) = 1.013e5\n        (qm(t)=1, [connect = Flow])\n    end\n    ODESystem(Equation[], t, sts, []; name=name)\nend\n@connector Port begin\n    p(t)\n    ṁ(t) = 0, [connect = Flow]\nend\n\n1@mtkmodel Orifice begin\n    @parameters begin\n        C₀=2.7\n        A₀=0.00094\n        ρ₀=1000\n        p′=0\n    end\n    @variables begin\n        ṁ(t)=0\n        p₁(t)=p′\n        p₂(t)=p′\n    end\n    @components begin\n        port₁ = Port()\n        port₂ = Port()\n    end\n    @equations begin\n        ṁ ~ +port₁.ṁ\n        ṁ ~ -port₂.ṁ\n        p₁ ~ port₁.p\n        p₂ ~ port₂.p\n\n        p₁ - p₂ ~ (1/2) * ρ₀ * u^2 * C₀\n    end\nend\n\n1\n\nthe @mtkmodel macro is equivalent to the function that returns an ODESystem in the prior code block",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>ModelingToolkit.jl</span>"
+    ]
+  },
+  {
+    "objectID": "modelingtoolkit.html#variables",
+    "href": "modelingtoolkit.html#variables",
+    "title": "2  ModelingToolkit.jl",
+    "section": "2.2 Variables",
+    "text": "2.2 Variables\nAfter constructing a system, ModelingToolkit identifies unknown and observed variables and equations.\nObserved equations look something like this\nobserved(odesys_x)\n15-element Vector{Symbolics.Equation}:\n xˍt(t) ~ 6.283185307179586amp*f*cos(6.283185307179586f*t)\n xˍtt(t) ~ -39.47841760435743amp*(f^2)*sin(6.283185307179586f*t)\n xˍttt(t) ~ -248.05021344239853amp*(f^3)*cos(6.283185307179586f*t)\n x(t) ~ x₀ + amp*sin(6.283185307179586f*t)\n ẋ(t) ~ xˍt(t)\n ẋˍt(t) ~ xˍtt(t)\n ẋˍtt(t) ~ xˍttt(t)\n ẍ(t) ~ ẋˍt(t)\n ẍˍt(t) ~ ẋˍtt(t)\n p(t) ~ (-M*g - M*ẍ(t)) / (-A)\n pˍt(t) ~ (M*ẍˍt(t)) / A\n r(t) ~ r₀*(1 + p(t) / β)\n rˍt(t) ~ (r₀*pˍt(t)) / β\n ṙ(t) ~ rˍt(t)\n ṁ(t) ~ A*r(t)*ẋ(t) + A*x(t)*ṙ(t)\n\n\n\n\n\n\nNote\n\n\n\nSome of the observables have a ˍt appended to the name. These are called dummy derivatives, which are a consequence of the algorithm to reduce the system DAE index.\n\n\n\n\n\n\n\n\nNote\n\n\n\nThese are the variables I display as results in the breadboard",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>ModelingToolkit.jl</span>"
+    ]
+  },
+  {
+    "objectID": "modelingtoolkit.html#examples",
+    "href": "modelingtoolkit.html#examples",
+    "title": "2  ModelingToolkit.jl",
+    "section": "2.3 Examples",
+    "text": "2.3 Examples\n\nAcausal component based modeling\nDeveloping high-fidelity models of hydraulic systems",
     "crumbs": [
       "<span class='chapter-number'>2</span>  <span class='chapter-title'>ModelingToolkit.jl</span>"
     ]
