@@ -186,13 +186,23 @@
     ]
   },
   {
+    "objectID": "equationofstate.html",
+    "href": "equationofstate.html",
+    "title": "7  Equation of state",
+    "section": "",
+    "text": "In the Ai4EComponentLib.CompressedAir package, the equation of state for dry air is used in the FlowPort to define a relationship between pressure, density and temperature.\nstateEquation(p, ρ, T) = p - ρ * T * 287.11\n\n@connector function FlowPort(; name)\n    sts = @variables begin\n        p(t) = 1.013e5\n        T(t) = 300\n        (qm(t)=0, [connect = Flow])\n        (ρ(t)=1.2, [connect = Stream])\n        (μ(t)=1.819e-5, [connect = Stream])\n        (qv(t)=0, [connect = Stream])\n    end\n    eqs = [\n        0 ~ stateEquation(p, ρ, T)\n        μ ~ 1.819e-5\n        qv ~ qm / ρ\n    ]\n    ODESystem(eqs, t, sts, []; name=name)\nend\nIn ModelingToolkitStandardLibrary.IsothermalCompressible, the Tait-Murnaghan equation of state is used within the VolumeBase and FixedVolume components to calculate density.",
+    "crumbs": [
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Equation of state</span>"
+    ]
+  },
+  {
     "objectID": "summary.html",
     "href": "summary.html",
-    "title": "7  Summary",
+    "title": "8  Summary",
     "section": "",
     "text": "ModelingToolkitStandardLibrary.Tube",
     "crumbs": [
-      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Summary</span>"
+      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Summary</span>"
     ]
   },
   {
