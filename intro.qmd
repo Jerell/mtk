@@ -1,4 +1,0 @@
-# Introduction
-
-This is an explanation of the parts of the Julia models and how they relate to the differential equations that describe the system.
-
