@@ -1,0 +1,26 @@
+# Equation of state
+
+In the `Ai4EComponentLib.CompressedAir` package, the equation of state for dry air is used in the `FlowPort` to define a relationship between pressure, density and temperature.
+
+```julia
+stateEquation(p, ρ, T) = p - ρ * T * 287.11
+
+@connector function FlowPort(; name)
+    sts = @variables begin
+        p(t) = 1.013e5
+        T(t) = 300
+        (qm(t)=0, [connect = Flow])
+        (ρ(t)=1.2, [connect = Stream])
+        (μ(t)=1.819e-5, [connect = Stream])
+        (qv(t)=0, [connect = Stream])
+    end
+    eqs = [
+        0 ~ stateEquation(p, ρ, T)
+        μ ~ 1.819e-5
+        qv ~ qm / ρ
+    ]
+    ODESystem(eqs, t, sts, []; name=name)
+end
+```
+
+In `ModelingToolkitStandardLibrary.IsothermalCompressible`, the Tait-Murnaghan equation of state is [used](https://github.com/SciML/ModelingToolkitStandardLibrary.jl/blob/e6ffefa4d58f2e24c53f644715198871560e1080/src/Hydraulic/IsothermalCompressible/utils.jl#L141) within the `VolumeBase` and `FixedVolume` components to calculate density.

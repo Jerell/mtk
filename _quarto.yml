@@ -15,6 +15,7 @@ book:
         - ai4ecomponents.qmd
         - ai4epipes.qmd
     - connectors.qmd
+    - equationofstate.qmd
     - summary.qmd
     - references.qmd
 
